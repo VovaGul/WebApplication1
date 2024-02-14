@@ -1,5 +1,6 @@
-﻿using CRUD.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using WebApplication1.Entities;
 
 namespace WebApplication1;
 
@@ -8,8 +9,12 @@ public class Context : DbContext
     public DbSet<Good> Goods { get; set; }
     public DbSet<Sale> Sales { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public Context(DbContextOptions<Context> options) : base(options)
     {
-        optionsBuilder.UseSqlServer(@"server=(localdb)\mssqllocaldb;database=CrudDb;trusted_connection=true;");
     }
+
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseSqlServer(@"server=(localdb)\mssqllocaldb;database=CrudDb;trusted_connection=true;");
+    //}
 }
