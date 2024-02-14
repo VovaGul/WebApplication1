@@ -1,4 +1,4 @@
-﻿namespace CRUD.Entities;
+﻿namespace WebApplication1.Entities;
 
 public class Sale
 {
