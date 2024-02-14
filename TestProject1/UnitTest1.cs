@@ -8,11 +8,16 @@ namespace TestProject1
 {
     public class UnitTest1
     {
+        /// <summary>
+        /// ¬ывести количество продаж товаров за 10.10.2010, которые сто€т больше 10 долларов
+        /// </summary>
+        /// <returns></returns>
         [Fact]
-        public async Task Test1()
+        public async Task Number_of_sales_of_goods_whose_cost_exceeds() 
+            // я знаю, что в шарпе не используют обычно земли в именах,
+            // но € в книжке одной прочел, что в тестах так лучше делать. ≈сли надо € так делать не буду
         {
             // Arrange
-
             var connection = new SqliteConnection("Filename=:memory:");
             connection.Open();
 
