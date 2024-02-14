@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WebApplication1;
 using WebApplication1.Entities;
 
@@ -7,7 +8,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<Context>();
+builder.Services.AddDbContext<Context>(contextBuilder => contextBuilder
+    .UseSqlServer(@"server=(localdb)\mssqllocaldb;database=CrudDb;trusted_connection=true;"));
 
 var app = builder.Build();
 
@@ -23,58 +25,67 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+using var a = app.Services.CreateScope();
+var context = a.ServiceProvider.GetRequiredService<Context>();
 
 var cream = new Good()
 {
-    Id = 1,
     Name = "Крем",
-    Price = 10
+    Price = 20
 };
 
 var paste = new Good()
 {
-    Id = 2,
     Name = "Паста",
-    Price = 20
+    Price = 10
 };
 
 var pomade = new Good()
 {
-    Id = 3,
     Name = "Помада",
     Price = 3
-}; 
-app.Services.GetRequiredService<Context>().Goods.AddRangeAsync(new List<Good>()
+};
+await context.Database.EnsureDeletedAsync();
+await context.Database.EnsureCreatedAsync();
+await context.Goods.AddRangeAsync(new List<Good>()
 {
     cream,
     paste,
     pomade
 });
 
-app.Services.GetRequiredService<Context>().Sales.AddRangeAsync(new List<Sale>()
+await context.Sales.AddRangeAsync(new List<Sale>()
 {
     new Sale()
     {
         Good = cream,
-        SalesAmount = 3
+        SalesAmount = 3,
+        SaleDate = new DateTime(2020, 10, 10)
     },
     new Sale()
     {
         Good = cream,
-        SalesAmount = 5
+        SalesAmount = 5,
+        SaleDate = new DateTime(2020, 10, 10)
+    },
+    new Sale()
+    {
+        Good = cream,
+        SalesAmount = 5,
+        SaleDate = new DateTime(2020, 10, 11)
     },
     new Sale()
     {
         Good = paste,
-        SalesAmount = 2
+        SalesAmount = 2,
+        SaleDate = new DateTime(2020, 10, 11)
     },
     new Sale()
     {
         Good = pomade,
-        SalesAmount = 10
+        SalesAmount = 10,
+        SaleDate = new DateTime(2020, 10, 11)
     }
 });
-
-app.Services.GetRequiredService<Context>().Database.EnsureCreated();
-
+await context.SaveChangesAsync();
 app.Run();

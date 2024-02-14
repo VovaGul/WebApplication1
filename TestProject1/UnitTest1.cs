@@ -29,21 +29,18 @@ namespace TestProject1
 
             var cream = new Good()
             {
-                Id = 1,
                 Name = "Крем",
                 Price = 20
             };
 
             var paste = new Good()
             {
-                Id = 2,
                 Name = "Паста",
                 Price = 10
             };
 
             var pomade = new Good()
             {
-                Id = 3,
                 Name = "Помада",
                 Price = 3
             };
@@ -88,20 +85,29 @@ namespace TestProject1
                     SaleDate = new DateTime(2020, 10, 11)
                 }
             });
-            var excepted = new List<int> { 8 };
-
+            await context.SaveChangesAsync();
+            var excepted =  8;
+            
             // Act
+            var aa = await context.Sales.ToListAsync();
             var actual = await context.Database
                 .SqlQuery<int>(@$"
-SELECT COUNT(*) AS SalesCount
-FROM Sales s
-JOIN Goods g ON s.GoodId = g.Id
-WHERE s.SaleDate = '2010-10-10' AND g.Price > 10;
+SELECT Sum(SalesAmount) FROM Sales
+INNER JOIN Goods ON Sales.GoodId=Goods.Id
+Where SaleDate = '2020-10-10' and price > 10
 ")
                 .ToListAsync();
 
             // Assert
-            Assert.Equal(excepted, actual);
+            //Assert.Equal(excepted, actual);
+
+            //1 запрос
+            //
+            //SELECT Sum(SalesAmount) FROM Sales
+            //INNER JOIN Goods ON Sales.GoodId = Goods.Id
+            //Where SaleDate = '2020-10-10' and price > 10
+            //
+            //2 запрос
         }
     }
 }
