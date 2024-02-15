@@ -275,7 +275,7 @@ Where SaleDate = '2020-10-10' and price > 10
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task TASK3()
+        public async Task TASK4()
         {
             // Arrange
             var connection = new SqliteConnection("Filename=:memory:");
@@ -292,6 +292,137 @@ Where SaleDate = '2020-10-10' and price > 10
                 Name = "Крем",
                 Price = 20,
                 Category = "Косметика", 
+                Weight = 10
+            };
+
+            var paste = new Good()
+            {
+                Name = "Паста",
+                Price = 10,
+                Category = "Машины"
+            };
+
+            var pomade = new Good()
+            {
+                Name = "Помада",
+                Price = 3,
+                Category = "Косметика"
+            };
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
+            await context.Goods.AddRangeAsync(new List<Good>()
+            {
+                cream,
+                paste,
+                pomade
+            });
+
+            await context.Sales.AddRangeAsync(new List<Sale>()
+            {
+                new Sale()
+                {
+                    Good = cream,
+                    SalesAmount = 1000,
+                    SaleDate = DateTime.Now
+                },
+                new Sale()
+                {
+                    Good = cream,
+                    SalesAmount = 5,
+                    SaleDate = new DateTime(2020, 10, 11)
+                },
+                new Sale()
+                {
+                    Good = cream,
+                    SalesAmount = 1005,
+                    SaleDate = DateTime.Now
+                },
+                new Sale()
+                {
+                    Good = paste,
+                    SalesAmount = 1002,
+                    SaleDate = DateTime.Now
+                },
+                new Sale()
+                {
+                    Good = pomade,
+                    SalesAmount = 10,
+                    SaleDate = DateTime.Now
+                }
+            });
+            await context.SaveChangesAsync();
+            var excepted = 8;
+
+            // Ответ:
+            // косметика  2015
+            // машины 1002
+            // краска 9
+            // бумага 9
+            // мышь 8
+
+            // Act
+            var aa = await context.Sales.ToListAsync();
+            var actual = await context.Database
+                .SqlQuery<int>(@$"
+SELECT Sum(SalesAmount) FROM Sales
+INNER JOIN Goods ON Sales.GoodId=Goods.Id
+Where SaleDate = '2020-10-10' and price > 10
+")
+                .ToListAsync();
+
+            // Assert
+            //Assert.Equal(excepted, actual);
+
+            //1 запрос
+            //
+            //SELECT Sum(SalesAmount) FROM Sales
+            //INNER JOIN Goods ON Sales.GoodId = Goods.Id
+            //Where SaleDate = '2020-10-10' and price > 10
+            //
+            //2 запрос
+            //
+            //SELECT TOP 5
+            //G.Id,
+            //G.Name,
+            //SUM(S.SalesAmount) AS TotalSales
+            //FROM
+            //    Goods G
+            //    JOIN
+            //Sales S ON G.Id = S.GoodId
+            //GROUP BY
+            //G.Id, G.Name, G.Description, G.Category, G.Weight, G.Price
+            //    ORDER BY
+            //TotalSales DESC;
+            //
+            //3 запрос
+            //
+            //SELECT a.Category, a.Weight, a.Name
+            //    FROM Goods a
+            //INNER JOIN(
+            //    SELECT Category, MAX(Weight) Weight
+            //        FROM Goods
+            //        group by Category
+            //) b ON a.Category = b.Category AND a.Weight = b.Weight
+        }
+
+        [Fact]
+        public async Task TASK3()
+        {
+            // Arrange
+            var connection = new SqliteConnection("Filename=:memory:");
+            connection.Open();
+
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseSqlite(connection)
+                .Options;
+
+            await using var context = new Context(options);
+
+            var cream = new Good()
+            {
+                Name = "Крем",
+                Price = 20,
+                Category = "Косметика",
                 Weight = 10
             };
 
@@ -354,11 +485,7 @@ Where SaleDate = '2020-10-10' and price > 10
             var excepted = 8;
 
             // Ответ:
-            // крем 13
-            // паста 10
-            // краска 9
-            // бумага 9
-            // мышь 8
+            // 
 
             // Act
             var aa = await context.Sales.ToListAsync();
@@ -370,39 +497,7 @@ Where SaleDate = '2020-10-10' and price > 10
 ")
                 .ToListAsync();
 
-            // Assert
-            //Assert.Equal(excepted, actual);
 
-            //1 запрос
-            //
-            //SELECT Sum(SalesAmount) FROM Sales
-            //INNER JOIN Goods ON Sales.GoodId = Goods.Id
-            //Where SaleDate = '2020-10-10' and price > 10
-            //
-            //2 запрос
-            //
-            //SELECT TOP 5
-            //G.Id,
-            //G.Name,
-            //SUM(S.SalesAmount) AS TotalSales
-            //FROM
-            //    Goods G
-            //    JOIN
-            //Sales S ON G.Id = S.GoodId
-            //GROUP BY
-            //G.Id, G.Name, G.Description, G.Category, G.Weight, G.Price
-            //    ORDER BY
-            //TotalSales DESC;
-            //
-            //3 запрос
-            //
-            //SELECT a.Category, a.Weight, a.Name
-            //    FROM Goods a
-            //INNER JOIN(
-            //    SELECT Category, MAX(Weight) Weight
-            //        FROM Goods
-            //        group by Category
-            //) b ON a.Category = b.Category AND a.Weight = b.Weight
         }
     }
 }

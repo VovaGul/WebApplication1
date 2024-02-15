@@ -40,5 +40,13 @@ INNER JOIN(
 4 запрос 
 
 ```
+select Category, avg(Price) Price, sum(SalesAmount) SalesAmount from Goods a
+inner join(
+	select GoodId, sum(SalesAmount) SalesAmount from Sales
+		where CAST(SaleDate AS DATE) = CAST(GETDATE() AS DATE)
+		group by GoodId
+) b on a.Id = b.GoodId
+group by Category
+having sum(SalesAmount) > 1000
 ```
 

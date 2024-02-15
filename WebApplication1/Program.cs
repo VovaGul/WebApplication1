@@ -32,19 +32,23 @@ var context = a.ServiceProvider.GetRequiredService<Context>();
 var cream = new Good()
 {
     Name = "Крем",
-    Price = 20
+    Price = 20,
+    Category = "Косметика",
+    Weight = 10
 };
 
 var paste = new Good()
 {
     Name = "Паста",
-    Price = 10
+    Price = 10,
+    Category = "Машины"
 };
 
 var pomade = new Good()
 {
     Name = "Помада",
-    Price = 3
+    Price = 3,
+    Category = "Косметика"
 };
 await context.Database.EnsureDeletedAsync();
 await context.Database.EnsureCreatedAsync();
@@ -60,32 +64,32 @@ await context.Sales.AddRangeAsync(new List<Sale>()
     new Sale()
     {
         Good = cream,
-        SalesAmount = 3,
-        SaleDate = new DateTime(2020, 10, 10)
-    },
-    new Sale()
-    {
-        Good = cream,
-        SalesAmount = 5,
-        SaleDate = new DateTime(2020, 10, 10)
+        SalesAmount = 1000,
+        SaleDate = DateTime.Now
     },
     new Sale()
     {
         Good = cream,
         SalesAmount = 5,
         SaleDate = new DateTime(2020, 10, 11)
+    },
+    new Sale()
+    {
+        Good = cream,
+        SalesAmount = 1005,
+        SaleDate = DateTime.Now
     },
     new Sale()
     {
         Good = paste,
-        SalesAmount = 2,
-        SaleDate = new DateTime(2020, 10, 11)
+        SalesAmount = 1002,
+        SaleDate = DateTime.Now
     },
     new Sale()
     {
         Good = pomade,
         SalesAmount = 10,
-        SaleDate = new DateTime(2020, 10, 11)
+        SaleDate = DateTime.Now
     }
 });
 await context.SaveChangesAsync();
