@@ -7,7 +7,7 @@ select Name, SalesAmount, Price
 from Goods a
 inner join(
 	select GoodId, sum(SalesAmount) SalesAmount from Sales
-	where SaleDate = '2020-10-10'
+	where CAST(SaleDate AS DATE) = CAST('2020-10-10' AS DATE)
 	group by GoodId
 ) b on a.GoodId = b.GoodId
 where price > 10
