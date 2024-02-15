@@ -35,25 +35,25 @@ using (var scope = app.Services.CreateScope())
     await context.Database.EnsureCreatedAsync();
     var cream = new Good()
     {
-        Name = "крем",
+        Name = "РєСЂРµРј",
         Price = 20,
-        Category = "косметика",
+        Category = "РєРѕСЃРјРµС‚РёРєР°",
         Weight = 10
     };
 
     var paste = new Good()
     {
-        Name = "паста",
+        Name = "РїР°СЃС‚Р°",
         Price = 10,
-        Category = "машины",
+        Category = "РјР°С€РёРЅС‹",
         Weight = 15
     };
 
     var pomade = new Good()
     {
-        Name = "помада",
+        Name = "РїРѕРјР°РґР°",
         Price = 3,
-        Category = "косметика",
+        Category = "РєРѕСЃРјРµС‚РёРєР°",
         Weight = 5
     };
     await context.Database.EnsureCreatedAsync();
