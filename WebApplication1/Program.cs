@@ -56,7 +56,6 @@ using (var scope = app.Services.CreateScope())
         Category = "косметика",
         Weight = 5
     };
-    await context.Database.EnsureCreatedAsync();
     await context.Goods.AddRangeAsync(new List<Good>()
     {
         cream,
