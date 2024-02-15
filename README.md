@@ -11,18 +11,13 @@ Where SaleDate = '2020-10-10' and price > 10
 2 запрос 
 
 ```
-SELECT TOP 5
-G.Id,
-G.Name,
-SUM(S.SalesAmount) AS TotalSales
-FROM
-    Goods G
-    JOIN
-Sales S ON G.Id = S.GoodId
-GROUP BY
-G.Id, G.Name, G.Description, G.Category, G.Weight, G.Price
-    ORDER BY
-TotalSales DESC;
+select top 5 Name, SalesAmount
+from Goods a
+inner join(
+	select GoodId, sum(SalesAmount) SalesAmount from Sales
+	group by GoodId
+) b on a.Id = b.GoodId
+ORDER BY SalesAmount DESC
 ```
 
 3 запрос
