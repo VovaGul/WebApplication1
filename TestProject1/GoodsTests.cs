@@ -87,14 +87,6 @@ public class GoodsTests
             .AddSingleton<ComparerAsValueObjects>()
             .BuildServiceProvider();
 
-        await using var context = serviceProvider.GetRequiredService<Context>();
-        await context.Goods.AddRangeAsync(new List<Good>
-        {
-            new() { Name = "TestGood1" },
-            new() { Name = "TestGood2" }
-        });
-        await context.SaveChangesAsync();
-
         //Act
         var result = await serviceProvider.GetRequiredService<GoodsController>().GetGood(4);
 
@@ -106,11 +98,77 @@ public class GoodsTests
     [Fact]
     public async Task Update_good()
     {
+        // Arrange
+        var databaseName = Guid.NewGuid().ToString();
+        var serviceProvider = new ServiceCollection()
+            .AddDbContext<Context>(builder => builder
+                .UseInMemoryDatabase(databaseName))
+            .AddSingleton<GoodsController>()
+            .AddSingleton<ComparerAsValueObjects>()
+            .BuildServiceProvider();
+
+        var expected = new Good() { GoodId = 1, Name = "New name" };
+
+        using (var scope = serviceProvider.CreateScope())
+        {
+            await using var context = scope.ServiceProvider.GetRequiredService<Context>();
+            await context.Goods.AddRangeAsync(new List<Good>
+            {
+                new() { Name = "TestGood1" },
+                new() { Name = "TestGood2" }
+            });
+            await context.SaveChangesAsync();
+        }
+
+        using (var scope = serviceProvider.CreateScope())
+        {
+            await using var context = scope.ServiceProvider.GetRequiredService<Context>();
+            // Act
+            var result = await serviceProvider.GetRequiredService<GoodsController>().PutGood(1, expected);
+
+            // Assert
+            var actual = await context.Goods.FindAsync(1);
+            Assert.IsType<NoContentResult>(result);
+            Assert.Equal(expected, actual, serviceProvider.GetRequiredService<ComparerAsValueObjects>());
+        }
+    }
+
+    [Fact]
+    public async Task Update_good_wrong_id()
+    {
+        // Arrange
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
+            .AddSingleton<GoodsController>()
+            .AddSingleton<ComparerAsValueObjects>()
+            .BuildServiceProvider();
+
+        // Act
+        var result = await serviceProvider.GetRequiredService<GoodsController>().PutGood(1, new Good { GoodId = 2 });
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestResult>(result);
+        Assert.Equal(400, badRequestResult.StatusCode);
     }
 
     [Fact]
     public async Task Update_not_exist_good()
     {
+        // Arrange
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
+            .AddSingleton<GoodsController>()
+            .AddSingleton<ComparerAsValueObjects>()
+            .BuildServiceProvider();
+
+        // Act
+        var result = await serviceProvider.GetRequiredService<GoodsController>().PutGood(1, new Good { GoodId = 1 });
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundResult>(result);
+        Assert.Equal(404, notFoundResult.StatusCode);
     }
 
     [Fact]
