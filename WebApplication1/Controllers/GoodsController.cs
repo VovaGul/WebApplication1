@@ -55,7 +55,7 @@ namespace WebApplication1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGood(int id, Good good)
         {
-            if (id != good.Id)
+            if (id != good.GoodId)
             {
                 return BadRequest();
             }
@@ -93,7 +93,7 @@ namespace WebApplication1.Controllers
             _context.Goods.Add(good);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGood", new { id = good.Id }, good);
+            return CreatedAtAction("GetGood", new { id = good.GoodId }, good);
         }
 
         // DELETE: api/Goods/5
@@ -118,7 +118,7 @@ namespace WebApplication1.Controllers
 
         private bool GoodExists(int id)
         {
-            return (_context.Goods?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Goods?.Any(e => e.GoodId == id)).GetValueOrDefault();
         }
     }
 }
