@@ -24,11 +24,11 @@ namespace WebApplication1.Controllers
         // GET: api/Goods
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Good>>> GetGoods()
-        {
-          if (_context.Goods == null)
-          {
-              return NotFound();
-          }
+        { 
+            if (_context.Goods == null) 
+            { 
+                return NotFound();
+            }
             return await _context.Goods.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Good>> GetGood(int id)
         {
-          if (_context.Goods == null)
-          {
-              return NotFound();
-          }
+            if (_context.Goods == null)
+            {
+                return NotFound();
+            }
             var good = await _context.Goods.FindAsync(id);
 
             if (good == null)
@@ -85,11 +85,11 @@ namespace WebApplication1.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Good>> PostGood(Good good)
-        {
-          if (_context.Goods == null)
-          {
-              return Problem("Entity set 'Context.Goods'  is null.");
-          }
+        { 
+            if (_context.Goods == null) 
+            { 
+                return Problem("Entity set 'Context.Goods'  is null.");
+            }
             _context.Goods.Add(good);
             await _context.SaveChangesAsync();
 
