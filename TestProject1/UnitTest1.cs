@@ -396,14 +396,15 @@ Where SaleDate = '2020-10-10' and price > 10
             //
             //3 запрос
             //
-            //SELECT
-            //G.Category,
-            //MAX(G.Name) AS MaxWeightGoodName,
-            //    MAX(G.Weight) AS MaxWeight
-            //    FROM
-            //Goods G
-            //GROUP BY
-            //G.Category
+            //SELECT a.Category, a.Weight, a.Name
+            //    FROM Goods a
+            //INNER JOIN(
+            //    SELECT Category, MAX(Weight) Weight
+
+            //        FROM Goods
+
+            //        group by Category
+            //) b ON a.Category = b.Category AND a.Weight = b.Weight
         }
     }
 }
