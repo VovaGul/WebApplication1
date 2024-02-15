@@ -12,9 +12,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ShopContext>((provider, contextBuilder)=> contextBuilder
     .UseSqlServer(provider.GetRequiredService<IOptions<DatabaseSettings>>().Value.ConnectionString));
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestLoggingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
