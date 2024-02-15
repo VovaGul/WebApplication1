@@ -6,6 +6,6 @@ public class Good
     public string Name { get; set; } = String.Empty;
     public string Description { get; set; } = String.Empty;
     public string Category { get; set; } = String.Empty;
-    public string Weight { get; set; } = String.Empty;
+    public int Weight { get; set; }
     public int Price { get; set; }
 }

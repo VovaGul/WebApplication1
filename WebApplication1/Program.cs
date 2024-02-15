@@ -31,19 +31,23 @@ var context = a.ServiceProvider.GetRequiredService<Context>();
 var cream = new Good()
 {
     Name = "Крем",
-    Price = 20
+    Price = 20,
+    Category = "Косметика",
+    Weight = 10
 };
 
 var paste = new Good()
 {
     Name = "Паста",
-    Price = 10
+    Price = 10,
+    Category = "Машины"
 };
 
 var pomade = new Good()
 {
     Name = "Помада",
-    Price = 3
+    Price = 3,
+    Category = "Косметика"
 };
 await context.Database.EnsureDeletedAsync();
 await context.Database.EnsureCreatedAsync();
