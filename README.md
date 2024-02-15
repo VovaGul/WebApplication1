@@ -1,6 +1,6 @@
 # WebApplication1
 
-1 запрос
+1 запрос. Вывести количество продаж товаров за 10.10.2010, которые стоят больше 10 долларов
 
 ```
 select Name, SalesAmount, Price
@@ -13,7 +13,7 @@ inner join(
 where price > 10
 ```
 
-2 запрос 
+2 запрос. Вывести топ 5 самых продаваемых товаров
 
 ```
 select top 5 Name, SalesAmount
@@ -25,7 +25,7 @@ inner join(
 ORDER BY SalesAmount DESC
 ```
 
-3 запрос
+3 запрос.  Для каждой категории товара вывести самый тяжелый
 
 ```
 SELECT a.Category, a.Weight, a.Name
@@ -37,7 +37,7 @@ INNER JOIN(
 ) b ON a.Category = b.Category AND a.Weight = b.Weight
 ```
 
-4 запрос 
+4 запрос. Вывести среднюю цену среди категорий товаров, проданную за сегодня и более тысячи штук товаров
 
 ```
 select Category, avg(Price) Price, sum(SalesAmount) SalesAmount from Goods a
