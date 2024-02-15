@@ -46,86 +46,47 @@ var pomade = new Good()
     Name = "Помада",
     Price = 3
 };
-
-var good4 = new Good()
-{
-    Name = "Краска",
-    Price = 3
-};
-
-var good5 = new Good()
-{
-    Name = "Бумага",
-    Price = 3
-};
-
-var good6 = new Good()
-{
-    Name = "мышь",
-    Price = 3
-};
 await context.Database.EnsureDeletedAsync();
 await context.Database.EnsureCreatedAsync();
 await context.Goods.AddRangeAsync(new List<Good>()
-            {
-                cream,
-                paste,
-                pomade,
-                good4,
-                good5,
-                good6
-            });
+{
+    cream,
+    paste,
+    pomade
+});
 
 await context.Sales.AddRangeAsync(new List<Sale>()
-            {
-                new Sale()
-                {
-                    Good = cream,
-                    SalesAmount = 3,
-                    SaleDate = new DateTime(2020, 10, 10)
-                },
-                new Sale()
-                {
-                    Good = cream,
-                    SalesAmount = 5,
-                    SaleDate = new DateTime(2020, 10, 10)
-                },
-                new Sale()
-                {
-                    Good = cream,
-                    SalesAmount = 5,
-                    SaleDate = new DateTime(2020, 10, 11)
-                },
-                new Sale()
-                {
-                    Good = paste,
-                    SalesAmount = 2,
-                    SaleDate = new DateTime(2020, 10, 11)
-                },
-                new Sale()
-                {
-                    Good = pomade,
-                    SalesAmount = 10,
-                    SaleDate = new DateTime(2020, 10, 11)
-                },
-                new Sale()
-                {
-                    Good = good4,
-                    SalesAmount = 9,
-                    SaleDate = new DateTime(2020, 10, 11)
-                },
-                new Sale()
-                {
-                    Good = good5,
-                    SalesAmount = 9,
-                    SaleDate = new DateTime(2020, 10, 11)
-                },
-                new Sale()
-                {
-                    Good = good6,
-                    SalesAmount = 8,
-                    SaleDate = new DateTime(2020, 10, 11)
-                }
-            });
+{
+    new Sale()
+    {
+        Good = cream,
+        SalesAmount = 3,
+        SaleDate = new DateTime(2020, 10, 10)
+    },
+    new Sale()
+    {
+        Good = cream,
+        SalesAmount = 5,
+        SaleDate = new DateTime(2020, 10, 10)
+    },
+    new Sale()
+    {
+        Good = cream,
+        SalesAmount = 5,
+        SaleDate = new DateTime(2020, 10, 11)
+    },
+    new Sale()
+    {
+        Good = paste,
+        SalesAmount = 2,
+        SaleDate = new DateTime(2020, 10, 11)
+    },
+    new Sale()
+    {
+        Good = pomade,
+        SalesAmount = 10,
+        SaleDate = new DateTime(2020, 10, 11)
+    }
+});
 await context.SaveChangesAsync();
 app.Run();

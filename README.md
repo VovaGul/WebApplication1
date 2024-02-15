@@ -3,9 +3,14 @@
 1 запрос
 
 ```
-SELECT Sum(SalesAmount) FROM Sales
-INNER JOIN Goods ON Sales.GoodId = Goods.Id
-Where SaleDate = '2020-10-10' and price > 10
+select Name, SalesAmount, Price
+from Goods a
+inner join(
+	select GoodId, sum(SalesAmount) SalesAmount from Sales
+	where SaleDate = '2020-10-10'
+	group by GoodId
+) b on a.Id = b.GoodId
+where price > 10
 ```
 
 2 запрос 
