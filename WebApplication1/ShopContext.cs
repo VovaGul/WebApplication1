@@ -5,12 +5,12 @@ using WebApplication1.Entities;
 
 namespace WebApplication1;
 
-public class Context : DbContext
+public class ShopContext : DbContext
 {
     public DbSet<Good> Goods { get; set; }
     public DbSet<Sale> Sales { get; set; }
 
-    public Context(DbContextOptions<Context> options) : base(options)
+    public ShopContext(DbContextOptions<ShopContext> options) : base(options)
     {
     }
 }

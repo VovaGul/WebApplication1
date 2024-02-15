@@ -14,7 +14,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -36,7 +36,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -48,7 +48,7 @@ public class GoodsTests
             new() { GoodId = 2, Name = "TestGood2" }
         };
 
-        await using var context = serviceProvider.GetRequiredService<Context>();
+        await using var context = serviceProvider.GetRequiredService<ShopContext>();
         await context.Goods.AddRangeAsync(new List<Good>
         {
             new() { Name = "TestGood1" },
@@ -69,7 +69,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -77,7 +77,7 @@ public class GoodsTests
 
         var expected = new Good { GoodId = 1, Name = "TestGood1" };
 
-        await using var context = serviceProvider.GetRequiredService<Context>();
+        await using var context = serviceProvider.GetRequiredService<ShopContext>();
         await context.Goods.AddRangeAsync(new List<Good>
         {
             new() { Name = "TestGood1" },
@@ -98,7 +98,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -118,7 +118,7 @@ public class GoodsTests
         // Arrange
         var databaseName = Guid.NewGuid().ToString();
         var serviceProvider = new ServiceCollection()
-            .AddDbContext<Context>(builder => builder
+            .AddDbContext<ShopContext>(builder => builder
                 .UseInMemoryDatabase(databaseName))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -128,7 +128,7 @@ public class GoodsTests
 
         using (var scope = serviceProvider.CreateScope())
         {
-            await using var context = scope.ServiceProvider.GetRequiredService<Context>();
+            await using var context = scope.ServiceProvider.GetRequiredService<ShopContext>();
             await context.Goods.AddRangeAsync(new List<Good>
             {
                 new() { Name = "TestGood1" },
@@ -139,7 +139,7 @@ public class GoodsTests
 
         using (var scope = serviceProvider.CreateScope())
         {
-            await using var context = scope.ServiceProvider.GetRequiredService<Context>();
+            await using var context = scope.ServiceProvider.GetRequiredService<ShopContext>();
             // Act
             var result = await serviceProvider.GetRequiredService<GoodsController>().PutGood(1, expected);
 
@@ -155,7 +155,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -174,7 +174,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -193,7 +193,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()
@@ -204,7 +204,7 @@ public class GoodsTests
             new() { GoodId = 2, Name = "TestGood2" }
         };
 
-        await using var context = serviceProvider.GetRequiredService<Context>();
+        await using var context = serviceProvider.GetRequiredService<ShopContext>();
         await context.Goods.AddRangeAsync(new List<Good>
         {
             new() { Name = "TestGood1" },
@@ -227,7 +227,7 @@ public class GoodsTests
     {
         // Arrange
         var serviceProvider = new ServiceCollection()
-            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+            .AddSingleton(_ => new ShopContext(new DbContextOptionsBuilder<ShopContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
             .AddSingleton<GoodsController>()
             .AddSingleton<ComparerAsValueObjects>()

@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<Context>((provider, contextBuilder)=> contextBuilder
+builder.Services.AddDbContext<ShopContext>((provider, contextBuilder)=> contextBuilder
     .UseSqlServer(provider.GetRequiredService<IOptions<DatabaseSettings>>().Value.ConnectionString));
 
 var app = builder.Build();
@@ -28,7 +28,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<Context>();
+    var context = scope.ServiceProvider.GetRequiredService<ShopContext>();
     await context.Database.EnsureDeletedAsync();
     await context.Database.EnsureCreatedAsync();
 }

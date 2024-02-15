@@ -14,25 +14,25 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class GoodsController : ControllerBase
     {
-        private readonly Context _context;
+        private readonly ShopContext _shopContext;
 
-        public GoodsController(Context context)
+        public GoodsController(ShopContext shopContext)
         {
-            _context = context;
+            _shopContext = shopContext;
         }
 
         // GET: api/Goods
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Good>>> GetGoods()
         {
-            return await _context.Goods.ToListAsync();
+            return await _shopContext.Goods.ToListAsync();
         }
 
         // GET: api/Goods/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Good>> GetGood(int id)
         {
-            var good = await _context.Goods.FindAsync(id);
+            var good = await _shopContext.Goods.FindAsync(id);
 
             if (good == null)
             {
@@ -52,11 +52,11 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(good).State = EntityState.Modified;
+            _shopContext.Entry(good).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _shopContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,8 +78,8 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<ActionResult<Good>> PostGood(Good good)
         {
-            _context.Goods.Add(good);
-            await _context.SaveChangesAsync();
+            _shopContext.Goods.Add(good);
+            await _shopContext.SaveChangesAsync();
 
             return CreatedAtAction("GetGood", new { id = good.GoodId }, good);
         }
@@ -88,21 +88,21 @@ namespace WebApplication1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGood(int id)
         {
-            var good = await _context.Goods.FindAsync(id);
+            var good = await _shopContext.Goods.FindAsync(id);
             if (good == null)
             {
                 return NotFound();
             }
 
-            _context.Goods.Remove(good);
-            await _context.SaveChangesAsync();
+            _shopContext.Goods.Remove(good);
+            await _shopContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool GoodExists(int id)
         {
-            return (_context.Goods?.Any(e => e.GoodId == id)).GetValueOrDefault();
+            return (_shopContext.Goods?.Any(e => e.GoodId == id)).GetValueOrDefault();
         }
     }
 }
