@@ -174,10 +174,53 @@ public class GoodsTests
     [Fact]
     public async Task Delete_good()
     {
+        // Arrange
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
+            .AddSingleton<GoodsController>()
+            .AddSingleton<ComparerAsValueObjects>()
+            .BuildServiceProvider();
+
+        var expected = new List<Good>
+        {
+            new() { GoodId = 2, Name = "TestGood2" }
+        };
+
+        await using var context = serviceProvider.GetRequiredService<Context>();
+        await context.Goods.AddRangeAsync(new List<Good>
+        {
+            new() { Name = "TestGood1" },
+            new() { Name = "TestGood2" }
+        });
+        await context.SaveChangesAsync();
+
+        //Act
+        var result = await serviceProvider.GetRequiredService<GoodsController>().DeleteGood(1);
+
+        // Assert
+        var actual = await context.Goods.ToListAsync();
+        Assert.IsType<NoContentResult>(result);
+        Assert.Equal(expected, actual, serviceProvider.GetRequiredService<ComparerAsValueObjects>());
+
     }
 
     [Fact]
     public async Task Delete_not_exist_good()
     {
+        // Arrange
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
+            .AddSingleton<GoodsController>()
+            .AddSingleton<ComparerAsValueObjects>()
+            .BuildServiceProvider();
+
+        //Act
+        var result = await serviceProvider.GetRequiredService<GoodsController>().DeleteGood(1);
+
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundResult>(result);
+        Assert.Equal(404, notFoundResult.StatusCode);
     }
 }
