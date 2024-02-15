@@ -400,9 +400,7 @@ Where SaleDate = '2020-10-10' and price > 10
             //    FROM Goods a
             //INNER JOIN(
             //    SELECT Category, MAX(Weight) Weight
-
             //        FROM Goods
-
             //        group by Category
             //) b ON a.Category = b.Category AND a.Weight = b.Weight
         }
