@@ -12,6 +12,23 @@ public class GoodsTests
     [Fact]
     public async Task Create_good()
     {
+        // Arrange
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(_ => new Context(new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options))
+            .AddSingleton<GoodsController>()
+            .AddSingleton<ComparerAsValueObjects>()
+            .BuildServiceProvider();
+
+        var expected = new Good() { GoodId = 1, Name = "TestGood1" };
+
+        //Act
+        var result = await serviceProvider.GetRequiredService<GoodsController>().PostGood(new Good { Name = "TestGood1" });
+
+        // Assert
+        var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+        var createdGood = Assert.IsType<Good>(createdAtActionResult.Value);
+        Assert.Equal(expected, createdGood, serviceProvider.GetRequiredService<ComparerAsValueObjects>());
     }
 
     [Fact]
