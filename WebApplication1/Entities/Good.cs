@@ -11,6 +11,6 @@ public class Good
     public string? Description { get; set; }
     [MaxLength(100)]
     public string? Category { get; set; }
-    public int Weight { get; set; }
-    public int Price { get; set; }
+    public int? Weight { get; set; }
+    public int? Price { get; set; }
 }
