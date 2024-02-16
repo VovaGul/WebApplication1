@@ -41,7 +41,7 @@ INNER JOIN(
 
 ```
 select Category, avg(Price) Price, sum(SalesAmount) SalesAmount from Goods a
-inner join(
+left join(
 	select GoodId, sum(SalesAmount) SalesAmount from Sales
 		where SaleDate = CAST(GETDATE() AS DATE)
 		group by GoodId
