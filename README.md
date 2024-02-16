@@ -5,7 +5,7 @@
 ```
 select Name, SalesAmount, Price
 from Goods a
-inner join(
+left join(
 	select GoodId, sum(SalesAmount) SalesAmount from Sales
 	where SaleDate = '2020-10-10'
 	group by GoodId
